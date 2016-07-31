@@ -36,9 +36,13 @@ $(document).ready(function() {
 	//Game resources
 	var intersect = true;
 	var snakeNodes = [];
-	var grow = 100;
-	var score = 0;
+	var grow = 25;
+	var score = 1;
 	var maxScore = 1;
+	if(localStorage.getItem("maxScore") != null) {
+		maxScore = localStorage.getItem("maxScore");
+		score = 0;
+	}
 	var health = 1;
 	var gameOver = false;
 	
@@ -151,13 +155,18 @@ $(document).ready(function() {
 		//Score
 		if(score > maxScore) {
 			maxScore = score;
+			if(localStorage.getItem("maxScore") === null) {
+				localStorage.setItem("maxScore",maxScore);
+			} else {
+				if(maxScore > localStorage.getItem("maxScore")) {
+					localStorage.setItem("maxScore",maxScore);
+				} else {
+					maxScore = localStorage.getItem("maxScore");
+				}
+			}
 		}
 		//Score bar
-		if(score > 0) {
-			var scoreText = "SCORE: " + score + "/" + maxScore;
-		} else {
-			var scoreText = "SCORE: 0/0";
-		}
+		var scoreText = "SCORE: " + score + "/" + maxScore;
 		ctx.strokeText(scoreText, titleWidth + (canvas.width - (titleWidth)) / 2 - ctx.measureText(scoreText).width / 2, 35);
 		ctx.fillStyle = "rgba(0,255,0,0.4)";
 		ctx.fillRect(titleWidth, 1, score/maxScore * (canvas.width-titleWidth), 50);
