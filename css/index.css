@@ -2,7 +2,9 @@ body {
 	background: #000;
 	margin: 0;
 	padding: 0;
+	box-shadow: inset 0px 0px 100px #111;
 }
 canvas {
-	background: #000;
+	background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJUlEQVQYV2NkIBIwEqPu69evkkQpBBlGlMLhaSLIV9zc3M/x0QAQfB7jOU7CTQAAAABJRU5ErkJggg==) repeat;
+	
 }
