@@ -41,7 +41,10 @@ $(document).ready(function() {
     var health = 1,
 		damageInc = 0.07,
     	gameOver = false,
-		pause = false;
+		pause = false,
+		//Delay adding new nodes by this many frames
+		mouseDelay = 2,
+		mouseDelayProgress = 0;
 
     //Food
     function Food() {
@@ -214,16 +217,20 @@ $(document).ready(function() {
                 }
             }
         }
-		//Add node to front, remove node from back
-        snakeNodes.push(new SnakeNode(mouseX, mouseY));
-        if (grow > 0) {
-            grow--;
-        } else {
-            snakeNodes.splice(0, 1);
-            if (snakeNodes[0].full) {
-                score--;
-            }
-        }
+		//Move the snake
+		mouseDelayProgress += deltaTime;
+		if(mouseDelayProgress >= mouseDelay) {
+			mouseDelayProgress = 0;
+			snakeNodes.push(new SnakeNode(mouseX, mouseY));
+			if (grow > 0) {
+				grow--;
+        	} else {
+				snakeNodes.splice(0, 1);
+            	if (snakeNodes[0].full) {
+					score--;
+            	}	
+        	}	
+		}
     }
 
     //Loop
@@ -246,7 +253,7 @@ $(document).ready(function() {
 				$('#debug').html("");
         		$('#debug').append("<strong>FPS <span class=\"secondary\">(ideal FPS)</span> <span class=\"colon\">:</span></strong> " + fps + " <span class=\"secondary\">(" + targetFPS + ")</span><br>");
 				$('#debug').append("<strong>Run speed <span class=\"secondary\">(%)</span> <span class=\"colon\">:</span></strong> " + runSpeed + " <span class=\"secondary\">(" + runSpeed*100 + "%)</span><br>");
-				$('#debug').append("<strong>Delta<span class=\"secondary\"> (frame step / ideal frame step)</span> <span class=\"colon\">:</span></strong> " + deltaTime + "<span class=\"secondary\">(" + step + "," + targetStep + ")</span><br>");
+				$('#debug').append("<strong>Delta<span class=\"secondary\"> (frame step / ideal frame step)</span> <span class=\"colon\">:</span></strong> " + deltaTime + " <span class=\"secondary\">(" + step + " / " + targetStep + ")</span><br>");
 				
 				//Game info
 				$('#debug').append("<hr>");
@@ -313,6 +320,13 @@ $(document).ready(function() {
 			$('#debug').toggle();
 			showDebug = !showDebug;
 			localStorage.setItem("showDebug",showDebug);
+		}
+		if(e.keyCode === 32) {
+			if(gameOver) {
+				location.reload();
+			} else {
+				pause = !pause;
+			}
 		}
 	});
 
